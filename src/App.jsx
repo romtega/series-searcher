@@ -2,8 +2,8 @@
 /* eslint-disable quotes */
 /* eslint-disable semi */
 
-import { useState, useEffect } from "react";
 import "./App.css";
+import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import SeriesCard from "./components/SeriesCard";
 
@@ -18,18 +18,36 @@ function App() {
       });
   };
 
+  const getSearch = (searchTerm) => {
+    if (searchTerm) {
+      fetch(`https://api.tvmaze.com/search/shows?q=${searchTerm}`)
+        .then((response) => response.json())
+        .then((res) => {
+          console.log("Search Results:", res);
+          setSeries(res);
+        })
+        .catch((error) => {
+          console.error("Error fetching search results:", error);
+        });
+    } else {
+      getSeries();
+    }
+  };
+
   useEffect(() => {
     getSeries();
   }, []);
 
   return (
     <>
-      <Navbar />
-      {series.map((seriesItem) => (
+      <Navbar onSearch={getSearch} />
+      {series.map((seriesItem, index) => (
         <SeriesCard
-          key={seriesItem.id}
+          key={seriesItem.id || seriesItem.name || index}
           title={seriesItem.name}
-          imgUrl={seriesItem.image.medium}
+          imgUrl={
+            seriesItem.image ? seriesItem.image.medium : "default-image-url"
+          }
           summary={seriesItem.summary}
         />
       ))}

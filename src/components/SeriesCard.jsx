@@ -13,6 +13,7 @@ function SeriesCard({ imgUrl, title, summary }) {
       <Card.Body>
         <Card.Title>{title}</Card.Title>
         <Card.Text>{summary}</Card.Text>
+
         <Button variant="primary">Ver mas</Button>
       </Card.Body>
     </Card>
