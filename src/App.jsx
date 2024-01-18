@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import SeriesCard from "./components/SeriesCard";
+import DetailsPage from "./components/DetailsPage";
 
 function App() {
   const [series, setSeries] = useState([]);
@@ -12,7 +14,7 @@ function App() {
       .then((res) => {
         const seriesWithImages = res.map((show) => ({
           ...show,
-          image: show.image ? show.image.medium : "default-image-url",
+          image: show.image.medium,
         }));
         setSeries(seriesWithImages);
         setIsLoading(false);
@@ -40,7 +42,7 @@ function App() {
             image: result.show.image
               ? result.show.image.medium
               : "default-image-url",
-            summary: result.show.summary,
+            genres: result.show.genres,
           }));
           setSeries(searchResults);
           setIsLoading(false);
@@ -55,25 +57,40 @@ function App() {
   };
 
   return (
-    <>
-      <Navbar onSearch={handleSearch} />
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : (
-        <div className="row">
-          {series.map((seriesItem, index) => (
-            <SeriesCard
-              key={seriesItem.id || seriesItem.name || index}
-              title={seriesItem.name}
-              imgUrl={seriesItem.image}
-              alt={seriesItem.name}
-              summary={seriesItem.summary}
-            />
-          ))}
-        </div>
-      )}
-    </>
+    <Router>
+      <>
+        <Navbar onSearch={handleSearch} />
+        <Routes>
+          <Route
+            path="/"
+            element={<SeriesList series={series} isLoading={isLoading} />}
+          />
+          <Route path="/details/:id" element={<DetailsPage />} />
+        </Routes>
+      </>
+    </Router>
   );
 }
+
+const SeriesList = ({ series, isLoading }) => (
+  <div>
+    {isLoading ? (
+      <p>Loading...</p>
+    ) : (
+      <div className="row">
+        {series.map((seriesItem) => (
+          <SeriesCard
+            id={seriesItem.id}
+            key={seriesItem.id}
+            title={seriesItem.name}
+            imgUrl={seriesItem.image}
+            genres={seriesItem.genres}
+            alt={seriesItem.name}
+          />
+        ))}
+      </div>
+    )}
+  </div>
+);
 
 export default App;

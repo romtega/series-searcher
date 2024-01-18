@@ -20,8 +20,9 @@ function MainNavbar({ onSearch }) {
 
   return (
     <Navbar
-      className="bg-body-tertiary justify-content-between"
+      className="bg-body text-light justify-content-between"
       data-bs-theme="dark"
+      expand="lg"
     >
       <Navbar.Brand href="/">
         <img
@@ -33,16 +34,18 @@ function MainNavbar({ onSearch }) {
         />
       </Navbar.Brand>
       <Nav className="me-auto">
-        <Nav.Link href="#peliculas">Peliculas</Nav.Link>
-        <Nav.Link href="#series">Series</Nav.Link>
+        <Nav.Link href="#peliculas" className="text-light">
+          Series
+        </Nav.Link>
+        <Nav.Link href="#series">Sobre esta pagina</Nav.Link>
       </Nav>
-      <Form className="inline" onSubmit={handleSubmit}>
+      <Form className="d-flex" onSubmit={handleSubmit}>
         <Row>
           <Col xs="auto">
             <Form.Control
               type="text"
               placeholder="Busca una serie"
-              className="mr-sm-2"
+              className="mr-2"
               data-bs-theme="light"
               value={searchTerm}
               onChange={handleSearchChange}
